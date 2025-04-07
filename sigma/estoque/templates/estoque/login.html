@@ -1,0 +1,236 @@
+{% extends 'estoque/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-animation">
+        <div class="sigma-logo">
+            <!-- Logo em formato de sigma (Σ) -->
+            <svg viewBox="0 0 100 100" class="sigma-symbol">
+                <path d="M10,50 Q50,10 90,50 Q50,90 10,50" fill="none" stroke="#2c3e50" stroke-width="8"/>
+            </svg>
+            <h1>SIGMA</h1>
+            <p class="subtitle">Sistema Integrado de Gestão e Monitoramento</p>
+        </div>
+    </div>
+    
+    <div class="login-box">
+        <div class="login-header">
+            <h2>Acesse sua conta</h2>
+        </div>
+        
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            
+            <div class="mb-3 form-group">
+                <label for="username" class="form-label">Usuário</label>
+                <input type="text" name="username" id="username" class="form-control" required>
+            </div>
+            
+            <div class="mb-3 form-group">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100 login-btn">Entrar</button>
+        </form>
+        
+        {% if form.errors %}
+        <div class="alert alert-danger mt-3 login-error">
+            Usuário ou senha incorretos. Tente novamente.
+        </div>
+        {% endif %}
+        
+        <!-- Opcional: link para recuperação de senha -->
+        <div class="text-center mt-3">
+            <a href="#" class="text-muted">Esqueceu sua senha?</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos base */
+    .login-container {
+        display: flex;
+        width: 900px;
+        max-width: 95%;
+        height: 500px;
+        max-height: 90vh;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: auto;
+    }
+    
+    .login-animation {
+        flex: 1;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Animação de fundo */
+    .login-animation::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L100,0 L100,100 L0,100 Z' fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='1'/%3E%3C/svg%3E");
+        animation: move 60s linear infinite;
+    }
+    
+    @keyframes move {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(-50%, -50%); }
+    }
+    
+    .sigma-logo {
+        text-align: center;
+        z-index: 1;
+        color: white;
+        padding: 20px;
+    }
+    
+    .sigma-symbol {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite alternate;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.8; }
+        100% { transform: scale(1.05); opacity: 1; }
+    }
+    
+    .sigma-logo h1 {
+        font-size: 3rem;
+        margin: 0;
+        font-weight: 700;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+        opacity: 0.8;
+        margin-top: 5px;
+    }
+    
+    .login-box {
+        flex: 1;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .login-header {
+        margin-bottom: 40px;
+        text-align: center;
+    }
+    
+    .login-header h2 {
+        color: #2c3e50;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+    
+    .login-form {
+        width: 100%;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border 0.3s;
+    }
+    
+    .form-group input:focus {
+        border-color: #2a5298;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
+    }
+    
+    .login-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(30, 60, 114, 0.3);
+    }
+    
+    .login-error {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #ffebee;
+        color: #c62828;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .login-container {
+            flex-direction: column;
+            height: auto;
+        }
+        
+        .login-animation {
+            padding: 30px;
+        }
+        
+        .sigma-symbol {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .sigma-logo h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<script>
+    // Animação adicional quando a página carrega
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginBox = document.querySelector('.login-box');
+        loginBox.style.opacity = '0';
+        loginBox.style.transform = 'translateX(20px)';
+        
+        setTimeout(() => {
+            loginBox.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            loginBox.style.opacity = '1';
+            loginBox.style.transform = 'translateX(0)';
+        }, 300);
+    });
+</script>
+{% endblock %}

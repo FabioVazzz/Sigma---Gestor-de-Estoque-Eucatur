@@ -1,0 +1,155 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="card border-0 shadow">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">
+            <i class="bi bi-plus-lg"></i> Adicionar Produto
+            <small class="float-end">Filial: {{ filial_usuario }}</small>
+        </h4>
+    </div>
+    <div class="card-body">
+        <!-- Mensagens de feedback -->
+        {% if messages %}
+        <div class="mb-3">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <!-- Exibe erros não associados a campos específicos -->
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="{{ form.codigo.id_for_label }}" class="form-label">{{ form.codigo.label }}</label>
+                    {{ form.codigo }}
+                    <small class="form-text text-muted">{{ form.codigo.help_text }}</small>
+                    {% if form.codigo.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.codigo.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.nome.id_for_label }}" class="form-label">{{ form.nome.label }}</label>
+                    {{ form.nome }}
+                    {% if form.nome.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.nome.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="{{ form.quantidade.id_for_label }}" class="form-label">{{ form.quantidade.label }}</label>
+                    {{ form.quantidade }}
+                    {% if form.quantidade.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.quantidade.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.preco_unitario.id_for_label }}" class="form-label">{{ form.preco_unitario.label }}</label>
+                    <div class="input-group">
+                        <span class="input-group-text">R$</span>
+                        {{ form.preco_unitario }}
+                    </div>
+                    {% if form.preco_unitario.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.preco_unitario.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.localizacao.id_for_label }}" class="form-label">{{ form.localizacao.label }}</label>
+                    {{ form.localizacao }}
+                    {% if form.localizacao.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.localizacao.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <label for="{{ form.descricao.id_for_label }}" class="form-label">{{ form.descricao.label }}</label>
+                    {{ form.descricao }}
+                    {% if form.descricao.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.descricao.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <!-- Campo de filial (readonly para edição) -->
+                    {% if form.filial %}
+                    <label for="{{ form.filial.id_for_label }}" class="form-label">{{ form.filial.label }}</label>
+                    {{ form.filial }}
+                    <small class="form-text text-muted">{{ form.filial.help_text }}</small>
+                    {% endif %}
+                    
+                    <!-- Campo parado_mais_um_ano -->
+                    <div class="form-check mt-3">
+                        {{ form.parado_mais_um_ano }}
+                        <label for="{{ form.parado_mais_um_ano.id_for_label }}" class="form-check-label">
+                            {{ form.parado_mais_um_ano.label }}
+                        </label>
+                        <small class="form-text text-muted d-block">{{ form.parado_mais_um_ano.help_text }}</small>
+                        {% if form.parado_mais_um_ano.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.parado_mais_um_ano.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-end mt-4">
+                <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-outline-secondary me-2">
+                    <i class="bi bi-x-lg"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Salvar Produto
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Adiciona classe 'is-invalid' para campos com erro
+    document.addEventListener('DOMContentLoaded', function() {
+        {% for field in form %}
+            {% if field.errors %}
+                const field = document.getElementById('{{ field.id_for_label }}');
+                if (field) {
+                    field.classList.add('is-invalid');
+                    
+                    // Para checkbox
+                    if (field.type === 'checkbox') {
+                        field.parentElement.classList.add('is-invalid');
+                    }
+                }
+            {% endif %}
+        {% endfor %}
+    });
+</script>
+{% endblock %}

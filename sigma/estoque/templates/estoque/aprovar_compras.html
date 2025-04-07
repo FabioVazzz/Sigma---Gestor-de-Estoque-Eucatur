@@ -1,0 +1,53 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ titulo }}</h2>
+    
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Produto</th>
+                <th>Estoque Atual</th>
+                <th>Qtd. Recomendada</th>
+                <th>Motivo</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rec in recomendacoes %}
+            <tr>
+                <td>{{ rec.produto.nome }}</td>
+                <td>{{ rec.produto.quantidade }}</td>
+                <td>{{ rec.quantidade_recomendada }}</td>
+                <td>
+                    {% if rec.motivo == 'ESTOQUE_BAIXO' %}
+                        <span class="badge bg-danger">Estoque Baixo</span>
+                    {% else %}
+                        <span class="badge bg-primary">Histórico</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if rec.status == 'PENDENTE' %}
+                        <span class="badge bg-warning text-dark">Pendente</span>
+                    {% elif rec.status == 'APROVADA' %}
+                        <span class="badge bg-success">Aprovada</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ rec.status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="#" class="btn btn-sm btn-success">Aprovar</a>
+                    <a href="#" class="btn btn-sm btn-danger">Rejeitar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Nenhuma recomendação encontrada</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

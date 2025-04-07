@@ -1,0 +1,39 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Recomendações de Compra</h2>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Motivo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rec in recomendacoes %}
+                <tr class="{% if rec.motivo == 'ESTOQUE_BAIXO' %}table-danger{% else %}table-primary{% endif %}">
+                    <td>{{ rec.produto.nome }}</td>
+                    <td>
+                        <input type="number" name="quantidade_{{ rec.id }}" 
+                               value="{{ rec.quantidade_recomendada }}" min="1">
+                    </td>
+                    <td>{{ rec.get_motivo_display }}</td>
+                    <td>
+                        <button type="submit" name="aprovar_{{ rec.id }}" 
+                                class="btn btn-sm btn-success">✓</button>
+                        <button type="submit" name="rejeitar_{{ rec.id }}" 
+                                class="btn btn-sm btn-danger">✕</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Enviar para Compras</button>
+    </form>
+</div>
+{% endblock %}

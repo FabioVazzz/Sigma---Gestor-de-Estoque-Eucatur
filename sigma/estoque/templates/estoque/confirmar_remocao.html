@@ -1,0 +1,35 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="card border-0 shadow">
+    <div class="card-header bg-danger text-white">
+        <h4 class="mb-0">
+            <i class="bi bi-exclamation-triangle"></i> Confirmar Remoção
+        </h4>
+    </div>
+    <div class="card-body">
+        <p>Tem certeza que deseja remover o produto abaixo?</p>
+        
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>{{ produto.nome }}</h5>
+                <p class="mb-1"><strong>Código:</strong> {{ produto.codigo }}</p>
+                <p class="mb-1"><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
+                <p class="mb-0"><strong>Localização:</strong> {{ produto.localizacao }}</p>
+            </div>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-secondary me-2">
+                    <i class="bi bi-x-lg"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Confirmar Remoção
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

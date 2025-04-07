@@ -1,0 +1,160 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Dashboard de Estoque</h2>
+
+    <!-- Row 1: Gráficos principais - Ajustei com classes de altura fixa -->
+    <div class="row g-4">
+        <!-- Gráfico 1: Valor Total -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Valor Total em Estoque</h5>
+                    <div class="flex-grow-1" style="min-height: 200px;">
+                        <canvas id="graficoValorTotal"></canvas>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <span class="badge bg-primary fs-6">R$ {{ valor_total|floatformat:2 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico 2: Valor Inativo -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Valor Inativo</h5>
+                    <div class="flex-grow-1" style="min-height: 200px;">
+                        <canvas id="graficoValorInativo"></canvas>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <span class="badge bg-danger fs-6">R$ {{ valor_inativo|floatformat:2 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico 3: Distribuição -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Distribuição de Itens</h5>
+                    <div class="flex-grow-1" style="min-height: 200px;">
+                        <canvas id="graficoItens"></canvas>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <span class="badge bg-success fs-6">{{ qtd_ativos }} ativos</span>
+                        <span class="badge bg-warning text-dark fs-6">{{ qtd_inativos }} inativos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Configuração comum para todos os gráficos
+    const configComum = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    boxWidth: 12,
+                    padding: 20
+                }
+            }
+        }
+    };
+
+    // 1. Gráfico do Valor Total
+    new Chart(
+        document.getElementById('graficoValorTotal'),
+        {
+            type: 'doughnut',
+            data: {
+                labels: ['Valor Total'],
+                datasets: [{
+                    data: [{{ valor_total }}],
+                    backgroundColor: ['#36a2eb'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                ...configComum,
+                cutout: '75%'
+            }
+        }
+    );
+
+    // 2. Gráfico do Valor Inativo
+    new Chart(
+        document.getElementById('graficoValorInativo'),
+        {
+            type: 'doughnut',
+            data: {
+                labels: ['Valor Inativo'],
+                datasets: [{
+                    data: [{{ valor_inativo }}],
+                    backgroundColor: ['#ff6384'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                ...configComum,
+                cutout: '75%'
+            }
+        }
+    );
+
+    // 3. Gráfico de Distribuição
+    new Chart(
+        document.getElementById('graficoItens'),
+        {
+            type: 'pie',
+            data: {
+                labels: ['Ativos', 'Inativos'],
+                datasets: [{
+                    data: [{{ qtd_ativos }}, {{ qtd_inativos }}],
+                    backgroundColor: ['#4bc0c0', '#ff9f40'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                ...configComum,
+                plugins: {
+                    ...configComum.plugins,
+                    legend: {
+                        ...configComum.plugins.legend,
+                        position: 'right'
+                    }
+                }
+            }
+        }
+    );
+</script>
+
+<style>
+    /* Correções para evitar layout "quebrado" */
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        overflow: hidden; /* Evita que elementos vazem */
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .card-body {
+        padding: 1.25rem;
+    }
+    .flex-grow-1 {
+        flex-grow: 1 !important;
+    }
+</style>
+{% endblock %}

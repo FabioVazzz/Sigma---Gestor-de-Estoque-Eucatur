@@ -1,0 +1,84 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 text-center mb-5">
+        <h1 class="display-4">Bem-vindo ao SIGMA</h1>
+        <p class="lead">Sistema Integrado de Gestão e Monitoramento</p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Card de Estoque -->
+    <div class="col-md-4 mb-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body text-center">
+                <div class="card-icon text-primary">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <h5 class="card-title">Gestão de Estoque</h5>
+                <p class="card-text">Controle completo do seu estoque de peças e materiais.</p>
+                <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-primary">Acessar</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Card de Dashboard -->
+    <div class="col-md-4 mb-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body text-center">
+                <div class="card-icon text-success">
+                    <i class="bi bi-graph-up"></i>
+                </div>
+                <h5 class="card-title">Dashboard</h5>
+                <p class="card-text">Visualize dados e métricas importantes do seu negócio.</p>
+                <a href="#" class="btn btn-success">Acessar</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Card de Recomendações -->
+    <div class="col-md-4 mb-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body text-center">
+                <div class="card-icon text-info">
+                    <i class="bi bi-cart-plus"></i>
+                </div>
+                <h5 class="card-title">Recomendações</h5>
+                <p class="card-text">Sugestões inteligentes para compras baseadas em histórico.</p>
+                <a href="#" class="btn btn-info">Acessar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Card de Veículos -->
+    <div class="col-md-6 mb-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body text-center">
+                <div class="card-icon text-warning">
+                    <i class="bi bi-truck"></i>
+                </div>
+                <h5 class="card-title">Gestão de Veículos</h5>
+                <p class="card-text">Controle da frota e manutenções preventivas.</p>
+                <a href="#" class="btn btn-warning">Acessar</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Card de Configurações -->
+    <div class="col-md-6 mb-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body text-center">
+                <div class="card-icon text-secondary">
+                    <i class="bi bi-gear"></i>
+                </div>
+                <h5 class="card-title">Configurações</h5>
+                <p class="card-text">Personalize o sistema conforme suas necessidades.</p>
+                <a href="#" class="btn btn-secondary">Acessar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

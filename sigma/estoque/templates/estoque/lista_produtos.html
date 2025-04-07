@@ -1,0 +1,90 @@
+{% extends 'estoque/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-box-seam"></i> Gestão de Estoque</h2>
+    <a href="{% url 'estoque:adicionar_produto' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Adicionar Produto
+    </a>
+</div>
+
+<!-- Barra de busca melhorada -->
+<div class="mb-4">
+    <div class="input-group">
+        <input type="text" id="search-input" class="form-control" 
+               placeholder="Buscar produtos..." autocomplete="off">
+        <button class="btn btn-outline-secondary" type="button" id="clear-search">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Tabela de produtos -->
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <!-- Cabeçalhos permanecem iguais -->
+            <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Quantidade</th>
+                <th>Localização</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="produtos-table-body">
+            {% include 'estoque/partials/linhas_produtos.html' %}  <!-- Linha corrigida -->
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    const searchInput = $('#search-input');
+    const tableBody = $('#produtos-table-body');
+    const clearBtn = $('#clear-search');
+    
+    // Função para buscar produtos
+    function searchProducts(term) {
+        $.ajax({
+            url: window.location.pathname,
+            data: {
+                'q': term
+            },
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(data) {
+                $.ajax({
+                    url: '{% url "estoque:lista_produtos" %}?q=' + term,
+                    success: function(html) {
+                        tableBody.html(html);
+                    }
+                });
+            }
+        });
+    }
+    
+    // Evento de digitação com debounce
+    let searchTimer;
+    searchInput.on('input', function() {
+        clearTimeout(searchTimer);
+        const term = $(this).val().trim();
+        searchTimer = setTimeout(() => {
+            searchProducts(term);
+        }, 300);
+    });
+    
+    // Limpar busca
+    clearBtn.on('click', function() {
+        searchInput.val('');
+        searchProducts('');
+    });
+    
+    // Busca inicial
+    searchProducts('');
+});
+</script>
+{% endblock %}
